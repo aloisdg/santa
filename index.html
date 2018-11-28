@@ -46,11 +46,21 @@
         exportAsZip(names, shuffle(names));
     }
 
+    function buildContent(santa, target) {
+        return "# Secret Santa\r\n\r\n" +
+        "Ce document appartient à " + santa + ".\r\n" +
+        "Personne d'autre ne doit lire ce document.\r\n\r\n" +
+        "Une question ? La FAQ peut vous aider !\r\n" +
+        "https://github.com/aloisdg/santa/wiki/FAQ\r\n\r\n" +
+        santa + ", vous devez offrir un cadeau à " + target + ".\r\n"
+    }
+
     function exportAsZip(santas, targets) {
         var zip = new JSZip();
 
         for (var i = 0; i < santas.length; i++) {
-            zip.file(santas[i]+".txt", targets[i]+"\n");
+            var content = buildContent(santas[i], targets[i]);
+            zip.file(santas[i]+".txt", content);
         }
 
         zip.generateAsync({type:"blob"})
