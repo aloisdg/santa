@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Secret Santa</title>
+
+    <!-- meta -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- mon icon -->
+    <!--<link rel="shortcut icon" href="favicon.ico">-->
+
+    <!-- mon template.css -->
+    <!--<link rel="stylesheet" href="main.css" media="screen">-->
+</head>
+
+<body>
+    <center>
+        <p>
+            Séparer les noms par un retour à la ligne.
+        </p>
+    <textarea id="names"></textarea>
+    <br/>
+    <button id="mixButton">Mélanger</button>
+    </center>
+</body>
+
+<script src="jszip.min.js"></script>
+<script src="fileSaver.js"></script>
+    <script>
+    function shuffle(input) {
+        var output = new Array(...input);
+        for (var i = output.length; i-- > 1;) {
+            var j = Math.floor(Math.random() * 10) % i;
+            var tmp = output[j];
+            output[j] = output[i];
+            output[i] = tmp;
+        }
+        return output;
+    }
+
+    function printSantas() {
+        var names = text.value.split('\n').filter(Boolean);
+        exportAsZip(names, shuffle(names));
+    }
+
+    function exportAsZip(santas, targets) {
+        var zip = new JSZip();
+
+        for (var i = 0; i < santas.length; i++) {
+            zip.file(santas[i]+".txt", targets[i]+"\n");
+        }
+
+        zip.generateAsync({type:"blob"})
+            .then(function(content) {
+            saveAs(content, "secret.zip");
+        });
+    }
+
+    var button = document.getElementById("mixButton");
+    var text = document.getElementById("names");
+    button.onclick = printSantas;
+    </script>
+
+</html>
